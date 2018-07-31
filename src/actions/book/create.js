@@ -1,6 +1,5 @@
 import { SubmissionError } from 'redux-form';
 import fetch from '../../utils/fetch';
-import { Actions } from 'react-native-router-flux';
 
 export function error(error) {
   return {type: 'BOOK_CREATE_ERROR', error};
@@ -25,9 +24,7 @@ export function create(values) {
         return response.json();
       })
       .then(data => {
-        dispatch(success(data));
-        Actions.pop();
-  })
+        dispatch(success(data))})
       .catch(e => {
         dispatch(loading(false));
 

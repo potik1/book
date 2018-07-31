@@ -1,19 +1,41 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { API_PATH } from '../config/_entrypoint';
+import {View} from 'react-native';
+import {SocialIcon} from 'react-native-elements';
 
-export function itemToLinks(items) {
-  return Array.isArray(items) ? items.map(item => createLink(item)) : createLink(items);
+export function paginationRoute(item) {
+  return '/' + item.split('/').splice(-1, 1);
 }
 
-function createLink(item) {
-  if ('string' !== typeof(item) || !item.includes(API_PATH)) {
-    return <div key={item}>{item}</div>;
-  }
+export function pagination(view, list) {
+  if (!view) return;
+  return (
+    <View style={ {flexDirection: 'row', alignSelf: 'center', alignContent: 'center'} }>
+      <SocialIcon
+        type='fast-backward'
+        iconColor={view['hydra:previous'] ? '#3faab4' : 'grey'}
+        onPress={() => list(paginationRoute(view['hydra:first']))}
+        disabled={!view['hydra:previous']}
+      />
+      <SocialIcon
+        type='backward'
+        iconColor={view['hydra:previous'] ? '#3faab4' : 'grey'}
+        onPress={() => list(paginationRoute(view['hydra:previous']))}
+        disabled={!view['hydra:previous']}
+      />
+      <SocialIcon
+        type='forward'
+        iconColor={view['hydra:next'] ? '#3faab4' : 'grey'}
+        onPress={() => list(paginationRoute(view['hydra:next']))}
+        disabled={!view['hydra:next']}
+      />
 
-  const routeWithoutPrefix = item.replace(API_PATH, '');
-  const splittedRoute = routeWithoutPrefix.split('/');
-  const route = '/' === routeWithoutPrefix[0] ? splittedRoute[1] : splittedRoute[0];
-
-  return <div key={item}><Link to={`/${route}/show/${encodeURIComponent(item)}`}>{item}</Link></div>;
+      <SocialIcon
+        type='fast-forward'
+        iconColor={view['hydra:next'] ? '#3faab4' : 'grey'}
+        disabled={!view['hydra:next']}
+        onPress={() => list(paginationRoute(view['hydra:last']))}
+        activityIndicatorStyle={ {backgroundColor:'red'} }
+      />
+    </View>
+  );
 }

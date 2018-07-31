@@ -7,8 +7,11 @@ import { Actions } from 'react-native-router-flux';
 import Spinner from '../Spinner';
 import { retrieve, reset } from '../../actions/book/show';
 import { del, loading, error } from '../../actions/book/delete';
+import { Confirm } from '../Confirm';
+
 
 class Show extends Component {
+
   static propTypes = {
     error: PropTypes.string,
     loading: PropTypes.bool.isRequired,
@@ -21,8 +24,16 @@ class Show extends Component {
     del: PropTypes.func.isRequired,
   };
 
+  state = {showModal: false};
+
   componentDidMount() {
     this.props.retrieve(this.props.id);
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.test !== nextProps.test) {
+      this.props.retrieve(this.props.id);
+    }
   }
 
   componentWillUnmount() {
@@ -30,24 +41,25 @@ class Show extends Component {
   }
 
   remove() {
-    const {del, retrieved} = this.props;
+    this.setState({showModal: !this.state.showModal});
+  }
 
-    Alert.alert(
-        '',
-        'Are you sure you want to delete this item?',
-        [
-          {text: 'Cancel', style: 'cancel'},
-          {text: 'OK', onPress: () => del(retrieved)},
-        ],
-        {cancelable: false},
-    );
-  };
+  onAccept() {
+    const {del, retrieved} = this.props;
+    del(retrieved);
+    Actions.pop();
+    this.setState({showModal: false});
+  }
+
+  onDecline() {
+    this.setState({showModal: false});
+  }
 
   static renderRow(title, value) {
     return (
         <ListItem
             subtitleStyle={{color: 'black', fontSize: 16}}
-            titleStyle={{color: 'gray', fontSize:16, paddingBottom:10}}
+            titleStyle={{color: 'gray', fontSize: 16, paddingBottom: 10}}
             key={value}
             hideChevron={true}
             title={title}
@@ -65,16 +77,19 @@ class Show extends Component {
           alignContent: 'center',
         }}>
           <SocialIcon
+              iconSize={34}
               type='plus-circle'
               iconColor='#3faab4'
               onPress={() => Actions.bookCreate()}
           />
           <SocialIcon
+              iconSize={34}
               type='edit'
               iconColor='#3faab4'
               onPress={() => Actions.bookUpdate({id})}
           />
           <SocialIcon
+              iconSize={34}
               type='minus-circle'
               iconColor='#3faab4'
               onPress={() => this.remove()}
@@ -87,48 +102,57 @@ class Show extends Component {
 
     if (this.props.loading) return <Spinner size="large"/>;
 
-    if (this.props.deleted) {
-      Alert.alert(
-          '',
-          'Item has been deleted!',
-          [
-            {text: 'OK', onPress: () => Actions.BookList()},
-          ],
-          {cancelable: false},
-      );
-    }
+      if (this.props.deleted) {
+        Alert.alert(
+            '',
+            'Item has been deleted!',
+            [
+              {text: 'OK', onPress: () => Actions.bookList()},
+            ],
+            {cancelable: false},
+        );
+      }
 
     const item = this.props.retrieved;
 
     return (
         <View style={{flex: 1}}>
           <ScrollView>
-            <Card containerStyle={{padding: 0}} >
-              {item &&
-                <List>
-                  {Show.renderRow('author', item['author'])}
-                  {Show.renderRow('title', item['title'])}
-                  {Show.renderRow('isbn', item['isbn'])}
-                  {Show.renderRow('description', item['description'])}
-                  {Show.renderRow('publicationDate', item['publicationDate'])}
-                </List>
-              }
+            {item &&
+            <Card title={'BOOK NO.  ' + item['@id'].substring(7)}>
+              <List title="title">
+                {Show.renderRow('id', item['@id'])}
+                {Show.renderRow('isbn', item['isbn'])}
+                {Show.renderRow('description', item['description'])}
+                {Show.renderRow('author', item['author'])}
+                {Show.renderRow('title', item['title'])}
+                {Show.renderRow('publicationDate', item['publicationDate'])}
+              </List>
             </Card>
+            }
           </ScrollView>
           {item && this.actionButtons(item['@id'])}
+          <Confirm
+              visible={this.state.showModal}
+              onAccept={() => this.onAccept()}
+              onDecline={() => this.onDecline()}
+          >
+            Are you sure you want to delete this?
+          </Confirm>
         </View>
     );
+
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    error: state.show.error,
-    loading: state.show.loading,
-    retrieved: state.show.retrieved,
-    deleteError: state.del.error,
-    deleteLoading: state.del.loading,
-    deleted: state.del.deleted,
+    error: state.book.show.error,
+    loading: state.book.show.loading,
+    retrieved: state.book.show.retrieved,
+    deleteError: state.book.del.error,
+    deleteLoading: state.book.del.loading,
+    deleted: state.book.del.deleted,
   };
 };
 

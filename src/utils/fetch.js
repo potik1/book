@@ -12,7 +12,6 @@ export default function (url, options = {}) {
   }
 
   const link = url.includes(API_PATH) ? API_HOST + url : API_HOST + API_PATH + url;
-   //const link = API_HOST + API_PATH;
 
   return fetch(link, options).then(response => {
     if (response.ok) return response;

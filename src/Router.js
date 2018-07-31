@@ -1,6 +1,5 @@
 import React from 'react';
-import { Router, Stack, Scene, Actions } from 'react-native-router-flux';
-
+import { Router, Scene, Actions } from 'react-native-router-flux';
 import List from './components/book/List';
 import Create from './components/book/Create';
 import Show from './components/book/Show';
@@ -8,25 +7,24 @@ import Update from './components/book/Update';
 
 const RouterComponent = () => {
 
+
   return (
-      <Router >
-        <Stack key="root" hideNavBar>
+      <Router>
           <Scene key="main" >
             <Scene
-                rightTitle="Add new"
+                rightTitle="Add"
                 onRight={() => Actions.bookCreate()}
-                key="list" component={List}
-                title="List od books"
+                key="bookList" component={List}
+                title="List of books"
                 initial
             />
             <Scene key="bookCreate" component={Create}
-                   title="Add a new book"/>
+                   title="Add a new book" />
             <Scene key="bookShow" component={Show}
-                   title="Edit Book"/>
+                   title="Book" />
             <Scene key="bookUpdate" component={Update}
-                   title="Update Book"/>
+                   title="Update Book" />
           </Scene>
-        </Stack>
       </Router>
   );
 };

@@ -7,6 +7,7 @@ import { Actions } from 'react-native-router-flux';
 import Spinner from '../Spinner';
 import { list, reset } from '../../actions/book/list';
 import { success } from '../../actions/book/delete';
+import { pagination } from '../../utils/helpers';
 
 class ListComponent extends Component {
 
@@ -71,18 +72,18 @@ class ListComponent extends Component {
                   item => ListComponent.renderRow(item))}
             </List>
           </ScrollView>
+          {pagination(this.props.data['hydra:view'], this.props.list)}
         </View>
-
     );
   }
 }
 
 const mapStateToProps = state => {
-  const {data, error, loading} = state.list;
+  const {data, error, loading} = state.book.list;
   return {data, error, loading};
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     list: (page) => dispatch(list(page)),
     reset: () => {
@@ -96,7 +97,7 @@ const styles = {
   viewList: {
     flex: 1,
     overflow: 'hidden',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   listRowLeft: {
     flex: 1,
@@ -104,8 +105,8 @@ const styles = {
     padding: 5,
     justifyContent: 'flex-start',
     position: 'relative',
-    color:'gray',
-    fontSize:16
+    color: 'gray',
+    fontSize: 16,
   },
   listRowRight: {
     flex: 1,

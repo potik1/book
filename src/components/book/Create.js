@@ -1,11 +1,9 @@
-import React, {Component} from 'react';
-import {View,ScrollView} from 'react-native';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { View, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Form from './Form';
-import { Button } from 'react-native-elements';
 import { create, loading, error } from '../../actions/book/create';
-
 
 class Create extends Component {
   static propTypes = {
@@ -20,21 +18,25 @@ class Create extends Component {
     this.props.reset();
   }
 
+
   render() {
+
     return (
-      <View style={ {flex: 1} }>
-        <ScrollView>
-          <Form onSubmit={this.props.create} values={this.props.item}/>
-        </ScrollView>
-      </View>
+        <View style={{flex: 1}}>
+          <ScrollView>
+            <Form mySubmit={values => this.props.create(values)}/>
+          </ScrollView>
+        </View>
     );
   }
 }
 
-const mapStateToProps = state => {
-  const { created, error, loading } = state.create;
-
-  return { created, error, loading };
+const mapStateToProps = (state) => {
+  return {
+    created: state.book.create.created,
+    error: state.book.create.error,
+    loading: state.book.create.loading,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
