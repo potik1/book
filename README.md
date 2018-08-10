@@ -4,3 +4,5 @@ testing app for [Api-Platform ClientGenerator](https://github.com/api-platform/c
 React Native templates.
 
 Pull request to client-generator is comming shortly with new functionality
+
+![List](img/list.png) ![List](img/item.png)
