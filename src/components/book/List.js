@@ -24,6 +24,12 @@ class ListComponent extends Component {
     this.props.list();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.refresh !== nextProps.refresh) {
+      this.props.list();
+    }
+  }
+
   componentWillUnmount() {
     this.props.reset();
   }

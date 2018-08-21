@@ -1,37 +1,39 @@
 import React from 'react';
-import { Text, View, Modal } from 'react-native';
-import { CardSection } from './CardSection';
-import { Button } from './Button';
+import { Text, View, Modal, TouchableOpacity } from 'react-native';
 
 const Confirm = ({children, visible, onAccept, onDecline}) => {
 
-  const {cardSectionStyle, textStyle, containerStyle} = styles;
+  const {textStyle, containerStyle, viewStyle, buttonStyle, textButtonStyle} = styles;
+
   return (
 
       <Modal
           visible={visible}
           transparent
           animationType="slide"
-          onRequestClose={() => {}}   //very important on android devices
+          onRequestClose={() => {}}
       >
         <View style={containerStyle}>
-          <CardSection style={cardSectionStyle}>
+          <View style={viewStyle}>
             <Text style={textStyle}>{children}</Text>
-          </CardSection>
+          </View>
 
-          <CardSection>
-            <Button onPress={onAccept}>Yes</Button>
-            <Button onPress={onDecline}>No</Button>
-          </CardSection>
+          <View style={viewStyle}>
+            <TouchableOpacity onPress={onAccept} style={ buttonStyle }>
+              <Text style={ textButtonStyle }>Yes
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onDecline} style={ buttonStyle }>
+              <Text style={ textButtonStyle }>No
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
   );
 };
 
 const styles = {
-  cardSectionStyle: {
-    justifyContent: 'center',
-  },
   textStyle: {
     flex: 1,
     fontSize: 18,
@@ -44,6 +46,33 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
 
+  },
+  viewStyle:{
+    borderBottomWidth:1,
+    padding:10,
+    backgroundColor: '#fff',
+    justifyContent: 'flex-start',
+    flexDirection:'row',
+    borderColor:'#ddd',
+    position: 'relative',
+  },
+  buttonStyle:{
+    flex: 1,
+    alignSelf: 'stretch',
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#3faab4',
+    marginRight: 5,
+    marginLeft: 5,
+  },
+  textButtonStyle: {
+    alignSelf: 'center',
+    color: '#3faab4',
+    fontSize:16,
+    fontWeight:'600',
+    paddingTop:10,
+    paddingBottom:10,
   },
 };
 

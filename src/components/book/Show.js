@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { ScrollView, Alert, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Card, List, ListItem, SocialIcon } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import Spinner from '../Spinner';
 import { retrieve, reset } from '../../actions/book/show';
 import { del, loading, error } from '../../actions/book/delete';
 import { Confirm } from '../Confirm';
-
+import {delayRefresh} from '../../utils/helpers';
 
 class Show extends Component {
 
@@ -22,6 +22,8 @@ class Show extends Component {
     deleteLoading: PropTypes.bool.isRequired,
     deleted: PropTypes.object,
     del: PropTypes.func.isRequired,
+    showModal:PropTypes.bool,
+    refresh:PropTypes.number
   };
 
   state = {showModal: false};
@@ -30,8 +32,8 @@ class Show extends Component {
     this.props.retrieve(this.props.id);
   }
 
-  componentWillReceiveProps(nextProps){
-    if(this.props.test !== nextProps.test) {
+ componentWillReceiveProps(nextProps){
+    if(this.props.refresh !== nextProps.refresh) {
       this.props.retrieve(this.props.id);
     }
   }
@@ -47,8 +49,9 @@ class Show extends Component {
   onAccept() {
     const {del, retrieved} = this.props;
     del(retrieved);
-    Actions.pop();
     this.setState({showModal: false});
+    Actions.pop();
+    delayRefresh();
   }
 
   onDecline() {
@@ -101,17 +104,6 @@ class Show extends Component {
   render() {
 
     if (this.props.loading) return <Spinner size="large"/>;
-
-      if (this.props.deleted) {
-        Alert.alert(
-            '',
-            'Item has been deleted!',
-            [
-              {text: 'OK', onPress: () => Actions.bookList()},
-            ],
-            {cancelable: false},
-        );
-      }
 
     const item = this.props.retrieved;
 

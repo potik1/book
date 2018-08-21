@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import Spinner from '../Spinner';
 import PropTypes from 'prop-types';
 import Form from './Form';
 import { success } from '../../actions/book/create';
 import { retrieve, update, reset } from '../../actions/book/update';
 import { del, loading, error } from '../../actions/book/delete';
+import { delayRefresh } from '../../utils/helpers';
 
 class Update extends Component {
 
@@ -27,7 +27,7 @@ class Update extends Component {
     reset: PropTypes.func.isRequired,
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.retrieve(this.props.id);
   }
 
@@ -35,32 +35,30 @@ class Update extends Component {
     this.props.reset();
   }
 
-  onSubmit(values, item) {
-    this.props.update(values, item);
+  onSubmit(item, values) {
+    this.props.update(item, values);
     Actions.pop();
-    setTimeout(() => {
-      Actions.refresh({test: true});
-    }, 10);
-  };
+    delayRefresh();
+  }
 
   render() {
-
-    //if (this.props.updateLoading || this.props.retrieveLoading) return <Spinner size="large"/>;
 
     const item = this.props.updated ? this.props.updated : this.props.retrieved;
 
     return (
+
         <View style={{flex: 1}}>
           <ScrollView>
             {item && <Form mySubmit={values => this.onSubmit(item, values)}
-                           initialValues={item}/>}
+                           initialValues={item}/>
+            }
           </ScrollView>
         </View>
     );
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     retrieveError: state.book.update.retrieveError,
     retrieveLoading: state.book.update.retrieveLoading,

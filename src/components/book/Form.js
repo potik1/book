@@ -10,16 +10,17 @@ import {
 
 class Form extends Component {
 
+
   renderField(data) {
     const hasError = data.meta.touched && !!data.meta.error;
     data.input.value = data.input.value.toString();
     return (
-        <View>
-          <FormLabel labelStyle={{
-            color: 'gray',
-            fontSize: 20,
-          }}>{data.input.name}</FormLabel>
-          <FormInput inputStyle={{color: 'black'}}
+       <View>
+          <FormLabel labelStyle={{color: 'gray', fontSize: 20}}>
+            {data.input.name}
+            </FormLabel>
+          <FormInput containerStyle={{flexDirection:'row'}}
+                     inputStyle={{color: 'black', flex:1}}
                      {...data.input}
                      step={data.step}
                      required={data.required}
@@ -29,18 +30,18 @@ class Form extends Component {
                      keyboardType='numeric'
           />
           {hasError &&
-          <FormValidationMessage>{data.meta.error}</FormValidationMessage>}
-        </View>
+          <FormValidationMessage>{data.meta.error}</FormValidationMessage> }
+          </View>
     );
   }
+
+
 
   render() {
 
     const {handleSubmit, mySubmit} = this.props;
 
     return <View style={{backgroundColor: 'white', paddingBottom: 20}}>
-     {/* <Field component={this.renderField} name="id" type="number"
-             placeholder=""/>*/}
       <Field component={this.renderField} name="isbn" type="text"
              placeholder="The ISBN of the book"/>
       <Field component={this.renderField} name="description" type="text"
@@ -56,13 +57,14 @@ class Form extends Component {
       <Button buttonStyle={styles.button}
               title='SAVE'
               onPress={handleSubmit(mySubmit)}
+
       />
     </View>;
   }
 }
 
-const styles={
-  button:{
+const styles = {
+  button: {
     flex: 1,
     backgroundColor: '#3faab4',
     borderRadius: 5,
@@ -70,12 +72,17 @@ const styles={
     borderColor: 'transparent',
     width: 300,
     height: 50,
-    margin: 20
+    margin: 20,
+  },
+  placeholderStyle:{
+    paddingRight:10
   }
 };
 
 export default reduxForm(
-    {form: 'book',
-      enableReinitialize: true, keepDirtyOnReinitialize: true})(
+    {
+      form: 'book',
+      enableReinitialize: true, keepDirtyOnReinitialize: true,
+    })(
     Form);
 

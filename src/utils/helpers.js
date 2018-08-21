@@ -1,6 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {SocialIcon} from 'react-native-elements';
+import { Actions } from 'react-native-router-flux';
 
 export function paginationRoute(item) {
   return '/' + item.split('/').splice(-1, 1);
@@ -38,4 +39,10 @@ export function pagination(view, list) {
       />
     </View>
   );
+}
+
+export function delayRefresh() {
+  setTimeout(() => {
+    Actions.refresh({refresh: Math.random()});
+  }, 500);
 }
