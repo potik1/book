@@ -17,6 +17,7 @@ class ListComponent extends Component {
     data: PropTypes.object.isRequired,
     list: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
+    refresh:PropTypes.number
   };
 
   componentDidMount() {
@@ -24,8 +25,8 @@ class ListComponent extends Component {
     this.props.list();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.refresh !== nextProps.refresh) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.refresh !== this.props.refresh) {
       this.props.list();
     }
   }

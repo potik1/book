@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
+import PropTypes from 'prop-types';
 
 const Spinner = ({size}) => {
   return (
@@ -15,6 +16,10 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center'
   },
+};
+
+Spinner.propTypes={
+  size: PropTypes.string.isRequired
 };
 
 export default Spinner;

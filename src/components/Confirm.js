@@ -1,5 +1,7 @@
 import React from 'react';
 import { Text, View, Modal, TouchableOpacity } from 'react-native';
+import PropTypes from 'prop-types';
+
 
 const Confirm = ({children, visible, onAccept, onDecline}) => {
 
@@ -32,6 +34,14 @@ const Confirm = ({children, visible, onAccept, onDecline}) => {
       </Modal>
   );
 };
+
+Confirm.propTypes = {
+  onDecline: PropTypes.func,
+  onAccept: PropTypes.func,
+  visible: PropTypes.bool,
+  children:PropTypes.string,
+};
+
 
 const styles = {
   textStyle: {

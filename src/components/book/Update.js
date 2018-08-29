@@ -23,6 +23,8 @@ class Update extends Component {
     retrieve: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
+    id: PropTypes.string,
+    created:PropTypes.func,
   };
 
   componentDidMount() {

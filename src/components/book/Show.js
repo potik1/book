@@ -7,6 +7,7 @@ import { Actions } from 'react-native-router-flux';
 import Spinner from '../Spinner';
 import { retrieve, reset } from '../../actions/book/show';
 import { del, loading, error } from '../../actions/book/delete';
+import {list } from '../../actions/book/list';
 import { Confirm } from '../Confirm';
 import {delayRefresh} from '../../utils/helpers';
 
@@ -23,7 +24,9 @@ class Show extends Component {
     deleted: PropTypes.object,
     del: PropTypes.func.isRequired,
     showModal:PropTypes.bool,
-    refresh:PropTypes.number
+    refresh:PropTypes.number,
+    id:PropTypes.string,
+    list: PropTypes.func.isRequired,
   };
 
   state = {showModal: false};
@@ -32,9 +35,9 @@ class Show extends Component {
     this.props.retrieve(this.props.id);
   }
 
- componentWillReceiveProps(nextProps){
-    if(this.props.refresh !== nextProps.refresh) {
-      this.props.retrieve(this.props.id);
+  componentDidUpdate(prevProps) {
+    if (prevProps.refresh !== this.props.refresh) {
+      this.props.list();
     }
   }
 
@@ -157,6 +160,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     retrieve: id => dispatch(retrieve(id)),
+    list: page =>dispatch(list(page)),
     del: item => dispatch(del(item)),
     reset: () => {
       dispatch(reset());
