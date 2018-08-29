@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { Card, List, ListItem, SocialIcon } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import Spinner from '../Spinner';
@@ -104,8 +104,11 @@ class Show extends Component {
   render() {
 
     if (this.props.loading) return <Spinner size="large"/>;
+    if (this.props.deleted) return Actions.pop();
 
     const item = this.props.retrieved;
+
+    const {viewStyle, textStyleAlert } = styles;
 
     return (
         <View style={{flex: 1}}>
@@ -122,6 +125,9 @@ class Show extends Component {
               </List>
             </Card>
             }
+            {this.props.deleteLoading && <View style={viewStyle}><Spinner size='large'/></View>}
+            {this.props.deleteError && <View style={viewStyle}><Text style={textStyleAlert}>{this.props.deleteError}</Text></View>}
+            {this.props.error && <View style={viewStyle}><Text style={textStyleAlert}>{this.props.error}</Text></View>}
           </ScrollView>
           {item && this.actionButtons(item['@id'])}
           <Confirm
@@ -158,6 +164,23 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(loading(false));
     },
   };
+};
+
+
+const styles = {
+  viewStyle: {
+    borderBottomWidth: 1,
+    padding: 5,
+    backgroundColor: '#fff',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    borderColor: '#ddd',
+    position: 'relative',
+  },
+  textStyleAlert: {
+    color: 'red',
+    textAlign: 'center',
+  }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Show);

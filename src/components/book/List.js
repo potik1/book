@@ -43,7 +43,7 @@ class ListComponent extends Component {
 
     return (
         <ListItem
-            key={item['@id']}
+            key={Math.random()}
             onPressRightIcon={() => ListComponent.show(item['@id'])}
             subtitle={
               <View>

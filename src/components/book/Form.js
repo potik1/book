@@ -8,8 +8,8 @@ import {
   Button,
 } from 'react-native-elements';
 
-class Form extends Component {
 
+class Form extends Component {
 
   renderField(data) {
     const hasError = data.meta.touched && !!data.meta.error;
@@ -36,7 +36,6 @@ class Form extends Component {
   }
 
 
-
   render() {
 
     const {handleSubmit, mySubmit} = this.props;
@@ -51,13 +50,12 @@ class Form extends Component {
              required={true}/>
       <Field component={this.renderField} name="title" type="text"
              placeholder="The title of the book" required={true}/>
-      <Field component={this.renderField} name="publicationDate" type="text"
+      <Field component={this.renderField} name="publicationDate" type="date"
              placeholder="The date on which the CreativeWork was created or the item was added to a DataFeed"
              required={true}/>
       <Button buttonStyle={styles.button}
               title='SAVE'
               onPress={handleSubmit(mySubmit)}
-
       />
     </View>;
   }
