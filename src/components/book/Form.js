@@ -35,7 +35,6 @@ class Form extends Component {
     );
   }
 
-
   render() {
 
     const {handleSubmit, mySubmit} = this.props;
